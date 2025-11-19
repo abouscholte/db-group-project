@@ -56,6 +56,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>{team ? `${team.name} | Teams` : 'Team Not Found'} | Basketball Scores</title>
+</svelte:head>
+
 {#if !team}
     <div class="not-found">
         <h1>Team Not Found</h1>

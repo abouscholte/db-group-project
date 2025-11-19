@@ -83,6 +83,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>Players | Basketball Scores</title>
+</svelte:head>
+
 <div class="players-view">
     <h1 class="page-title">Players</h1>
     

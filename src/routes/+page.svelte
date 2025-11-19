@@ -113,6 +113,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Today & Upcoming | Basketball Scores</title>
+</svelte:head>
+
 <div class="sticky-filters" class:scrolled={isScrolled}>
     <LeaguePills bind:selectedLeagueId />
 </div>

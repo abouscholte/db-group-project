@@ -76,6 +76,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>{player ? `${player.first_name} ${player.last_name} | Players` : 'Player Not Found'} | Basketball Scores</title>
+</svelte:head>
+
 {#if !player}
     <div class="not-found">
         <h1>Player Not Found</h1>

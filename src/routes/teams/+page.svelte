@@ -46,6 +46,10 @@
     })();
 </script>
 
+<svelte:head>
+    <title>Teams | Basketball Scores</title>
+</svelte:head>
+
 <div class="teams-view">
     <h1 class="page-title">Teams</h1>
     
