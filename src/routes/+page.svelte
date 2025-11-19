@@ -3,6 +3,7 @@
     import MatchCard from '$lib/components/MatchCard.svelte';
     import MatchDetailModal from '$lib/components/MatchDetailModal.svelte';
     import { matches } from '$lib/data/matches.js';
+    import { leagues } from '$lib/data/leagues.js';
     import type { Match } from '$lib/data/matches.js';
     import CaretDown from 'phosphor-svelte/lib/CaretDown';
     import CaretUp from 'phosphor-svelte/lib/CaretUp';
@@ -234,7 +235,7 @@
 
     .matches-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
 
@@ -289,14 +290,14 @@
         color: var(--color-text-light);
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 800px) {
         .matches-grid {
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: var(--spacing-lg);
         }
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1280px) {
         .matches-grid {
             grid-template-columns: repeat(3, 1fr);
         }

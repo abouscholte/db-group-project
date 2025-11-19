@@ -30,9 +30,18 @@
         const d = new Date(dateStr);
         return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
     }
+
+    function createSlug(name: string): string {
+        return name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+
+    // Legacy click/key handlers removed; anchors now handle navigation semantically.
 </script>
 
-<button class="match-card" class:upcoming={isUpcoming} class:live={isLive} style="--league-color: {league?.brand_color}" onclick={onClick}>
+<div class="match-card" class:upcoming={isUpcoming} class:live={isLive} style="--league-color: {league?.brand_color}" onclick={onClick} role="button" tabindex="0" onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(); } }}>
     <div class="match-header">
         <div class="league-info">
             <img 
@@ -56,7 +65,19 @@
 
     <div class="match-teams">
         <div class="team home">
-            <div class="team-name">{homeTeam?.short_name}</div>
+            <img 
+                class="team-logo" 
+                src={homeTeam?.logo_url} 
+                alt={homeTeam?.name}
+                title={homeTeam?.name}
+            >
+                <a 
+                    class="team-name" 
+                    href={`/teams/${createSlug(homeTeam?.name ?? '')}`} 
+                    aria-label={`View team ${homeTeam?.name}`}
+                >
+                    {homeTeam?.short_name}
+                </a>
         </div>
         <div class="score">
             {#if isUpcoming}
@@ -75,7 +96,19 @@
             {/if}
         </div>
         <div class="team away">
-            <div class="team-name">{awayTeam?.short_name}</div>
+            <a 
+                class="team-name" 
+                href={`/teams/${createSlug(awayTeam?.name ?? '')}`} 
+                aria-label={`View team ${awayTeam?.name}`}
+            >
+                {awayTeam?.short_name}
+            </a>
+            <img 
+                class="team-logo" 
+                src={awayTeam?.logo_url} 
+                alt={awayTeam?.name}
+                title={awayTeam?.name}
+            >
         </div>
     </div>
 
@@ -83,7 +116,7 @@
         <span class="status">{match.status}</span>
         <span class="venue">{match.venue}</span>
     </div>
-</button>
+</div>
 
 <style>
     :root {
@@ -240,6 +273,26 @@
         align-items: center;
         justify-content: center;
         min-width: 0;
+        gap: var(--spacing-md);
+    }
+
+    .team-logo {
+        width: 2.5rem;
+        height: 2.5rem;
+        object-fit: contain;
+        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.12));
+        transition: transform 0.15s ease;
+    }
+
+    .team:hover .team-logo {
+        transform: scale(1.05);
+    }
+
+    @media (max-width: 640px) {
+        .team-logo {
+            width: 2rem;
+            height: 2rem;
+        }
     }
 
     .team.away {
@@ -254,10 +307,26 @@
         word-break: break-word;
     }
 
+    .team-name {
+        position: relative;
+        text-decoration: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        transition: color 0.15s ease, background 0.15s ease;
+    }
+
+    .team-name:hover,
+    .team-name:focus-visible {
+        background: var(--color-bg-secondary);
+        color: var(--color-primary);
+        outline: none;
+    }
+
     .score {
         display: flex;
         align-items: center;
         justify-content: center;
+        min-width: 110px;
     }
 
     .score-display {

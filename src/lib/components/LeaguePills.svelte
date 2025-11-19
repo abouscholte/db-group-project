@@ -117,11 +117,15 @@
         font-size: var(--font-size-sm);
         display: inline-flex;
         align-items: center;
+        gap: 0.5rem;
         line-height: 1;
-        transform: translateY(0.08em);
     }
 
-    .country-text { display: none; }
+    .country-text { 
+        display: none;
+        margin-right: 0.25rem;
+        line-height: 1;
+    }
 
     .label .long { display: none; }
     .label .short { display: inline; }
@@ -129,6 +133,7 @@
     @media (min-width: 768px) {
         .label .long { display: inline; }
         .label .short { display: none; }
+        .country-text { display: inline; }
     }
 
     .pill.active .country {

@@ -15,7 +15,6 @@
 
   const navLinks = [
     { href: '/', label: 'Today & Upcoming' },
-    { href: '/standings', label: 'Standings' },
     { href: '/players', label: 'Players' },
     { href: '/teams', label: 'Teams' }
   ];

@@ -67,6 +67,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Global link reset */
+a {
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  text-decoration: none;
+}
+
 .main-container {
   max-width: var(--container-max-width);
   margin: var(--spacing-md) auto;

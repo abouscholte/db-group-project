@@ -47,6 +47,21 @@
             }
         }
     }
+
+    function createSlug(name: string): string {
+        return name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+
+    function createPlayerSlug(firstName: string, lastName: string): string {
+        return `${firstName}-${lastName}`
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+
 </script>
 
 <div class="modal-backdrop" role="button" tabindex="0" aria-label="Close modal" onclick={handleBackdropClick} onkeydown={handleBackdropKeydown}>
@@ -66,11 +81,27 @@
 
         <div class="score-section">
             <div class="team-score">
+                <a 
+                    class="team-logo-link"
+                    href={homeTeam ? `/teams/${createSlug(homeTeam.name)}` : undefined}
+                    aria-label="View {homeTeam?.name}"
+                    title="View {homeTeam?.name}"
+                >
+                    <img class="team-logo" src={homeTeam?.logo_url} alt={homeTeam?.short_name} />
+                </a>
                 <h3>{homeTeam?.short_name}</h3>
                 <div class="score">{match.home_score ?? '-'}</div>
             </div>
             <div class="vs">VS</div>
             <div class="team-score">
+                <a 
+                    class="team-logo-link"
+                    href={awayTeam ? `/teams/${createSlug(awayTeam.name)}` : undefined}
+                    aria-label="View {awayTeam?.name}"
+                    title="View {awayTeam?.name}"
+                >
+                    <img class="team-logo" src={awayTeam?.logo_url} alt={awayTeam?.short_name} />
+                </a>
                 <h3>{awayTeam?.short_name}</h3>
                 <div class="score">{match.away_score ?? '-'}</div>
             </div>
@@ -108,13 +139,17 @@
                 {:else if homePlayers.length > 0}
                     <div class="players-grid">
                         {#each homePlayers as player}
-                            <div class="player-card">
+                            <a 
+                                class="player-card"
+                                href={`/players/${createPlayerSlug(player.first_name, player.last_name)}`}
+                                title="View {player.first_name} {player.last_name}"
+                            >
                                 <div class="player-number">#{player.jersey_number}</div>
                                 <div class="player-info">
                                     <div class="player-name">{player.first_name} {player.last_name}</div>
                                     <div class="player-details">{player.position} • {player.height_cm}cm</div>
                                 </div>
-                            </div>
+                            </a>
                         {/each}
                     </div>
                 {:else}
@@ -129,13 +164,17 @@
                 {:else if awayPlayers.length > 0}
                     <div class="players-grid">
                         {#each awayPlayers as player}
-                            <div class="player-card">
+                            <a 
+                                class="player-card"
+                                href={`/players/${createPlayerSlug(player.first_name, player.last_name)}`}
+                                title="View {player.first_name} {player.last_name}"
+                            >
                                 <div class="player-number">#{player.jersey_number}</div>
                                 <div class="player-info">
                                     <div class="player-name">{player.first_name} {player.last_name}</div>
                                     <div class="player-details">{player.position} • {player.height_cm}cm</div>
                                 </div>
-                            </div>
+                            </a>
                         {/each}
                     </div>
                 {:else}
@@ -204,8 +243,8 @@
     }
 
     .league-logo {
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 1.75rem;
+        height: 1.75rem;
         object-fit: contain;
     }
 
@@ -251,6 +290,35 @@
 
     .team-score {
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-sm);
+    }
+
+    .team-logo-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border-radius: var(--radius-md);
+        transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .team-logo-link:hover {
+        transform: scale(1.1);
+    }
+
+    .team-logo-link:hover .team-logo {
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+    }
+
+    .team-score .team-logo {
+        width: 3rem;
+        height: 3rem;
+        object-fit: contain;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
+        transition: filter 0.2s ease, transform 0.2s ease;
     }
 
     .team-score h3 {
@@ -360,11 +428,15 @@
         border-radius: var(--radius-md);
         border: 1px solid var(--color-border);
         transition: all 0.2s ease;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
     }
 
     .player-card:hover {
         border-color: var(--color-primary);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transform: translateY(-1px);
     }
 
     .player-number {
@@ -406,7 +478,12 @@
         }
 
         .score {
-            font-size: 2rem;
+            font-size: 1.75rem;
+        }
+
+        .team-score .team-logo {
+            width: 2.4rem;
+            height: 2.4rem;
         }
 
         .players-grid {
