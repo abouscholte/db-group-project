@@ -1,7 +1,9 @@
 <script lang="ts">
     import LeaguePills from '$lib/components/LeaguePills.svelte';
     import MatchCard from '$lib/components/MatchCard.svelte';
+    import MatchDetailModal from '$lib/components/MatchDetailModal.svelte';
     import { matches } from '$lib/data/matches.js';
+    import type { Match } from '$lib/data/matches.js';
     import CaretDown from 'phosphor-svelte/lib/CaretDown';
     import CaretUp from 'phosphor-svelte/lib/CaretUp';
 
@@ -9,6 +11,7 @@
     let selectedLeagueId: number | null = $state(null);
     let isScrolled = $state(false);
     let showAllMatches = $state(false);
+    let selectedMatch: Match | null = $state(null);
 
     $effect(() => {
         const handleScroll = () => {
@@ -123,7 +126,7 @@
             <h2 class="section-header">Today</h2>
             <div class="matches-grid">
                 {#each groupedSections.todayMatches as match (match.id)}
-                    <MatchCard {match} />
+                    <MatchCard {match} onClick={() => selectedMatch = match} />
                 {/each}
             </div>
         </section>
@@ -134,7 +137,7 @@
             <h2 class="section-header">Tomorrow</h2>
             <div class="matches-grid">
                 {#each groupedSections.tomorrowMatches as match (match.id)}
-                    <MatchCard {match} />
+                    <MatchCard {match} onClick={() => selectedMatch = match} />
                 {/each}
             </div>
         </section>
@@ -149,7 +152,7 @@
                     <h3 class="day-header">{day.label}</h3>
                     <div class="matches-grid">
                         {#each day.matches as match (match.id)}
-                            <MatchCard {match} />
+                            <MatchCard {match} onClick={() => selectedMatch = match} />
                         {/each}
                     </div>
                 </div>
@@ -165,7 +168,7 @@
                         <h3 class="day-header">{day.label}</h3>
                         <div class="matches-grid">
                             {#each day.matches as match (match.id)}
-                                <MatchCard {match} />
+                                <MatchCard {match} onClick={() => selectedMatch = match} />
                             {/each}
                         </div>
                     </div>
@@ -184,6 +187,10 @@
             </button>
         </div>
     {/if}
+{/if}
+
+{#if selectedMatch}
+    <MatchDetailModal match={selectedMatch} onClose={() => selectedMatch = null} />
 {/if}
 
 <style>

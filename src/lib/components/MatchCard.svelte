@@ -3,7 +3,7 @@
     import { teams } from '$lib/data/teams.js';
     import type { Match } from '$lib/data/matches.js';
 
-    const { match } = $props<{ match: Match }>();
+    const { match, onClick } = $props<{ match: Match; onClick?: () => void }>();
 
     const league = $derived(leagues.find(l => l.id === match.league_id));
     const homeTeam = $derived(teams.find(t => t.id === match.home_team_id));
@@ -32,7 +32,7 @@
     }
 </script>
 
-<div class="match-card" class:upcoming={isUpcoming} class:live={isLive} style="--league-color: {league?.brand_color}">
+<button class="match-card" class:upcoming={isUpcoming} class:live={isLive} style="--league-color: {league?.brand_color}" onclick={onClick}>
     <div class="match-header">
         <div class="league-info">
             <img 
@@ -83,7 +83,7 @@
         <span class="status">{match.status}</span>
         <span class="venue">{match.venue}</span>
     </div>
-</div>
+</button>
 
 <style>
     :root {
@@ -102,6 +102,9 @@
         transition: all 0.2s ease;
         position: relative;
         overflow: hidden;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
     }
 
     .match-card.upcoming {

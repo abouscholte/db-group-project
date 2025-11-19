@@ -63,8 +63,8 @@
         background: #fff;
         color: var(--color-text);
         border-radius: var(--radius-full);
-        padding: var(--spacing-sm) var(--spacing-md);
-        min-height: 2.25rem;
+        padding: 0.5rem 1rem;
+        min-height: 2.75rem; /* desktop base slightly larger too */
         font-weight: 500;
         white-space: nowrap;
         display: inline-flex;
@@ -74,6 +74,7 @@
         line-height: 1;
         transition: background-color 0.15s ease, border-color 0.15s ease, 
                   color 0.15s ease, box-shadow 0.15s ease;
+        touch-action: manipulation;
     }
 
     .pill:hover {
@@ -132,5 +133,27 @@
 
     .pill.active .country {
         color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Mobile optimizations: larger tap targets */
+    @media (max-width: 640px) {
+        .pills {
+            gap: var(--spacing-sm);
+        }
+        .pill {
+            padding: 0.7rem 0.95rem; /* slightly tighter now country removed */
+            min-height: 2.9rem; /* ~46px tap target */
+            font-size: 0.95rem;
+        }
+        /* Show only the emoji (hide textual country code) */
+        .country { 
+            display: inline-flex; 
+            align-items: center; 
+            font-size: 1rem; 
+            margin-left: var(--spacing-xs);
+        }
+        .country-text { display: none; }
+        /* Slightly smaller dot for compact mobile layout */
+        .dot { width: 0.55em; height: 0.55em; }
     }
 </style>

@@ -21,6 +21,8 @@
   ];
 
   let menuOpen = $state(false);
+  let searchOpen = $state(false);
+  let searchQuery = $state('');
 
   function isActive(href: string, currentPath: string) {
     if (href === '/') {
@@ -31,10 +33,21 @@
 
   function toggleMenu() {
     menuOpen = !menuOpen;
+    if (menuOpen) searchOpen = false;
   }
 
   function closeMenu() {
     menuOpen = false;
+  }
+
+  function toggleSearch() {
+    searchOpen = !searchOpen;
+    if (searchOpen) menuOpen = false;
+  }
+
+  function closeSearch() {
+    searchOpen = false;
+    searchQuery = '';
   }
 </script>
 
@@ -53,8 +66,12 @@
         <span>Scores</span>
       </a>
     </div>
-    <button class="search-button" aria-label="Search">
-      <MagnifyingGlass size={24} />
+    <button class="search-button" aria-label="Search" onclick={toggleSearch}>
+      {#if searchOpen}
+        <X size={24} />
+      {:else}
+        <MagnifyingGlass size={24} />
+      {/if}
     </button>
   </div>
   <nav class="navigation-menu" class:visible={menuOpen}>
@@ -71,6 +88,19 @@
       {/each}
     </div>
   </nav>
+  <div class="search-menu" class:visible={searchOpen}>
+    <div class="search-content">
+      <div class="search-input-wrapper">
+        <MagnifyingGlass size={20} weight="bold" />
+        <input
+          type="text"
+          placeholder="Search teams, players, leagues..."
+          bind:value={searchQuery}
+          class="search-input"
+        />
+      </div>
+    </div>
+  </div>
 </header>
 
 <div class="main-container">
@@ -216,6 +246,70 @@
   .navigation-menu a.active {
     color: var(--color-text);
     font-weight: 600;
+  }
+
+  .search-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    opacity: 0;
+    margin-top: -8px;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 12px -6px rgba(0, 0, 0, 0.1);
+  }
+
+  .search-menu.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .search-content {
+    max-width: var(--breakpoint-md);
+    margin: 0 auto;
+    width: 100%;
+    padding: var(--spacing-md);
+  }
+
+  .search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    transition: border-color 0.2s ease;
+  }
+
+  .search-input-wrapper:focus-within {
+    border-color: var(--color-primary);
+  }
+
+  .search-input-wrapper :global(svg) {
+    color: var(--color-text-light);
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    padding: var(--spacing-xs) 0;
+  }
+
+  .search-input::placeholder {
+    color: var(--color-text-light);
   }
 </style>
 
